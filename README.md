@@ -90,7 +90,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AgentContainerConfig {
+public class ContainerConfig {
     @Bean
     public SpringPluginManager pluginManager() {
         return new SpringPluginManager();
@@ -132,6 +132,8 @@ public class PluginConfig implements BeanFactoryAware {
         List<FunctionCallback> functionList = new ArrayList<>();
         List<AgentPluginInterface> pluginInterfaces = pm.getExtensions(AgentPluginInterface.class);
         for (AgentPluginInterface plugin : pluginInterfaces) {
+            // registerFunctions is the method that I am defined in the plugin interface
+            // so I can get all the functions from the loaded plugins
             functionList.addAll(plugin.registerFunctions());
         }
         return functionList;
@@ -144,7 +146,7 @@ public class PluginConfig implements BeanFactoryAware {
 
 }
 ```
-In the above example code, I tried to get all the FunctionCallback from the loaded plugins and build up the list of FunctionCallback to provide for my AI engine. 
+In the above code, I tried to get all the FunctionCallback from the loaded plugins and build up the list of FunctionCallback to provide for my AI engine. 
 This is just an example, you can do whatever you want with the loaded plugins.
 
 ## How to change the plugin folder?
@@ -159,3 +161,5 @@ java -jar -Dpf4j.pluginsDir=plugins your-application-jar.jar
 From now on, you just need to copy the plugin jar file to the plugin folder and restart your application to load the new plugin.
 
 Hot reload is supported by the pf4j library, but I do not use it in my case. You can refer to the pf4j documentation for more information.
+
+Have fun with the plugin system!!!
